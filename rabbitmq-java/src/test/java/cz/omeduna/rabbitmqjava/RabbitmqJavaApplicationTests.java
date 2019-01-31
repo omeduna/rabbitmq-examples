@@ -28,9 +28,8 @@ public class RabbitmqJavaApplicationTests {
 
             for (int i = 0; i < 3; i++) {
                 channel.basicPublish("", QUEUE_NAME, null, MESSAGE.getBytes());
+                System.out.println("\n [x] Sent '" + MESSAGE + "'");
             }
-
-            System.out.println("\n [x] Sent '" + MESSAGE + "'");
         }
     }
 
@@ -41,17 +40,19 @@ public class RabbitmqJavaApplicationTests {
 
         try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel()) {
 
-            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+//            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 
             while (true) {
+
                 GetResponse response = channel.basicGet(QUEUE_NAME, true);
-                if (response == null) {
+
+                if (response != null) {
+                    System.out.println("\nResponse: " + response);
+                } else {
                     System.out.println("\nNO MORE MESSAGES!!!");
                     break;
                 }
-                System.out.println("\nResponse: " + response);
             }
-            System.out.println("\n");
         }
     }
 
