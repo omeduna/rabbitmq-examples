@@ -1,13 +1,13 @@
-package cz.omeduna.rabbitmqspringamqp;
+package cz.omeduna.rabbitmqjava;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RabbitmqSpringAmqpApplication {
+public class RabbitmqJavaApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(RabbitmqSpringAmqpApplication.class, args);
+        SpringApplication.run(RabbitmqJavaApplication.class, args);
     }
 
 }
