@@ -1,4 +1,4 @@
-package cz.omeduna.rabbitmqspringamqp.tut1;
+package cz.omeduna.rabbitmqspringamqp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -10,20 +10,20 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class Tut1SpringBootApplication {
+public class RabbitSpringBootApplication {
 
     @Autowired
     private ConfigurableApplicationContext applicationContext;
 
     public static void main(String[] args) {
-        SpringApplication.run(Tut1SpringBootApplication.class, args);
+        SpringApplication.run(RabbitSpringBootApplication.class, args);
     }
 
     @Bean
     public CommandLineRunner runner() {
         return (args) -> {
             System.out.println("Starting...");
-            Thread.sleep(5*1000);
+            Thread.sleep(10*1000);
             System.out.println("Shutting down");
             applicationContext.close();
         };

@@ -3,13 +3,12 @@ package cz.omeduna.rabbitmqjava;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.DeliverCallback;
 import com.rabbitmq.client.GetResponse;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
 public class RabbitmqJavaApplicationTests {
@@ -34,13 +33,13 @@ public class RabbitmqJavaApplicationTests {
     }
 
     @Test
-    public void consumeMessagesTest() throws IOException, TimeoutException {
+    public void getMessagesTest() throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
 
         try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel()) {
 
-//            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 
             while (true) {
 
@@ -53,6 +52,26 @@ public class RabbitmqJavaApplicationTests {
                     break;
                 }
             }
+        }
+    }
+
+    @Test
+    public void consumeMessagesTest() throws Exception {
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost("localhost");
+
+        try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel()) {
+
+            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+
+            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+                String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
+                System.out.println(" [x] Received '" + message + "'");
+            };
+
+            channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
+
+            Thread.sleep(1000);
         }
     }
 

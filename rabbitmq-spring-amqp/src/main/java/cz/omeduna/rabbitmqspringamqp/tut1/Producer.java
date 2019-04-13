@@ -5,19 +5,22 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
-public class Tut1Sender {
+public class Producer {
+
+    private static final String MESSAGE = "Hello Rabbit from Spring AMQP";
 
     @Autowired
-    private RabbitTemplate template;
+    private RabbitTemplate rabbitTemplate;
 
     @Autowired
-    private Queue queueTut1;
+    private Queue queue;
 
     @Scheduled(fixedDelay = 1000, initialDelay = 500)
-    public void send() {
-        String message = "Hello World!";
-        this.template.convertAndSend(queueTut1.getName(), message);
-        System.out.println(" [x] Sent '" + message + "'");
+    public void produce() {
+
+        rabbitTemplate.convertAndSend(queue.getName(), MESSAGE);
+
+        System.out.println(" [x] Sent '" + MESSAGE + "'");
     }
 
 }
